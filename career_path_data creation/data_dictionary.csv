@@ -1,0 +1,48 @@
+Feature,Type,Range/Values,Description
+student_id,String,STU_XXXXXX,Unique student identifier
+age,Integer,16-18,Age of student
+gender,Categorical,Male/Female/Other,Gender
+state,Categorical,15 states,Home state
+urban_rural,Categorical,Urban/Semi-Urban/Rural,Area type
+family_income,Categorical,5 brackets,Annual family income
+12th_stream,Categorical,Science-PCM/PCB/PCMB/Commerce/Arts,12th standard stream
+10th_percentage,Float,60-98,10th board percentage
+12th_percentage,Float,60-98,12th board percentage
+school_board,Categorical,CBSE/ICSE/State,School board
+school_tier,Categorical,Tier 1/2/3,School quality tier
+JEE_Main_percentile,Float,0-100 or null,JEE Main percentile score
+JEE_Advanced_rank,Integer,1-250000 or null,JEE Advanced rank (if qualified)
+NEET_percentile,Float,0-100 or null,NEET percentile score
+NEET_rank,Integer,1-2000000 or null,NEET rank (if qualified)
+CUET_score,Integer,200-800 or null,CUET score (if appeared)
+logical_reasoning,Float,1-10,Aptitude score - logical reasoning
+quantitative_ability,Float,1-10,Aptitude score - quantitative ability
+verbal_ability,Float,1-10,Aptitude score - verbal ability
+abstract_reasoning,Float,1-10,Aptitude score - abstract reasoning
+spatial_reasoning,Float,1-10,Aptitude score - spatial reasoning
+interest_technology,Float,1-5,Interest level in technology
+interest_healthcare,Float,1-5,Interest level in healthcare
+interest_business,Float,1-5,Interest level in business
+interest_creative_arts,Float,1-5,Interest level in creative arts
+interest_social_service,Float,1-5,Interest level in social service
+interest_research,Float,1-5,Interest level in research
+leadership,Float,1-5,Personality trait - leadership
+teamwork,Float,1-5,Personality trait - teamwork
+creativity,Float,1-5,Personality trait - creativity
+analytical_thinking,Float,1-5,Personality trait - analytical thinking
+communication,Float,1-5,Personality trait - communication
+preferred_location,Categorical,4 options,Location preference for study
+budget_constraint_lakhs,Integer,2-30,Education budget in lakhs INR
+career_goal_timeline,Categorical,4/5/6+ years,Timeline to achieve career goal
+work_preference,Categorical,Job/Business/Research/Govt,Preferred work type
+risk_tolerance,Categorical,Low/Medium/High,Risk taking capacity
+has_sports,Boolean,True/False,Participation in sports
+has_cultural,Boolean,True/False,Participation in cultural activities
+volunteering_hours,Integer,0-100,Hours of volunteering
+num_certifications,Integer,0-5,Number of online certifications
+num_projects,Integer,0-5,Number of projects completed
+career_path_year1,String,Career names,Chosen career path (Year 1)
+career_year2,String,Career names,Career position (Year 2)
+career_year3,String,Career names,Career position (Year 3)
+career_year4,String,Career names,Career position (Year 4)
+career_year5,String,Career names,Career position (Year 5)

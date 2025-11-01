@@ -1,0 +1,16 @@
+# requirements.txt - Python Dependencies for Streamlit App
+
+streamlit
+torch
+torch-geometric
+pandas
+numpy
+scikit-learn
+networkx
+matplotlib
+plotly
+Pillow
+protobuf
+
+# Optional (for deployment)
+python-dotenv
