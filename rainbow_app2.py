@@ -533,7 +533,7 @@ with tab1:
     # Predict button
     col_btn1, col_btn2, col_btn3 = st.columns([1, 1, 1])
     with col_btn2:
-        if st.button("🚀 Get Career Recommendations", use_container_width=True):
+        if st.button("Get Career Recommendations", use_container_width=True):
             try:
                 with st.spinner("🔄 Analyzing your profile with Rainbow DQN..."):
                     recommendations = get_realistic_recommendations(user_data)
@@ -546,7 +546,7 @@ with tab1:
                     for idx, rec in enumerate(recommendations, 1):
                         with st.container():
                             st.markdown(f'<div class="recommendation-box">', unsafe_allow_html=True)
-                            st.markdown(f"### 🔥 Recommendation {idx}")
+                            st.markdown(f"### Recommendation {idx}")
 
                             for year, career in enumerate(rec['path'], 1):
                                 st.markdown(f'<div class="year-box"><b>Year {year}:</b> {career}</div>', 
@@ -585,11 +585,11 @@ with tab2:
     with col_e1:
         st.metric("Avg Reward", "4.41")
     with col_e2:
-        st.metric("Peak", "5.00")
+        st.metric("Peak Reward", "5.00")
     with col_e3:
         st.metric("Stability", "3.35x")
     with col_e4:
-        st.metric("Status", "✅ Excellent")
+        st.metric("Status", "Excellent")
 
 with tab3:
     st.markdown("### 📖 About This System")
@@ -602,4 +602,4 @@ with tab3:
     st.info("✓ Be honest with scores\n✓ Consider all recommendations\n✓ Consult career counselors")
 
 st.markdown("---")
-st.markdown("🎓 Rainbow DQN Career Recommender | MTech 2025 | VIT Vellore")
+st.markdown("🎓 Rainbow DQN Career Recommender")

@@ -144,6 +144,207 @@ def get_realistic_recommendations(user_data, num_paths=3):
         })
     
     return recommendations
+def show_profile_summary(user_data):
+    """Display visual summary of student profile"""
+    
+    import matplotlib.pyplot as plt
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.subheader("📊 Aptitude Profile")
+        
+        aptitudes = {
+            'Logical': user_data['logical_reasoning'],
+            'Quantitative': user_data['quantitative_ability'],
+            'Verbal': user_data['verbal_ability'],
+            'Abstract': user_data['abstract_reasoning'],
+            'Spatial': user_data['spatial_reasoning'],
+        }
+        
+        fig, ax = plt.subplots(figsize=(8, 5))
+        ax.barh(list(aptitudes.keys()), list(aptitudes.values()), color='skyblue')
+        ax.set_xlabel('Score (1-10)')
+        ax.set_title('Your Aptitude Scores')
+        ax.set_xlim(0, 10)
+        st.pyplot(fig)
+    
+    with col2:
+        st.subheader("❤️ Interest Profile")
+        
+        interests = {
+            'Technology': user_data['interest_technology'],
+            'Healthcare': user_data['interest_healthcare'],
+            'Business': user_data['interest_business'],
+            'Research': user_data['interest_research'],
+            'Social': user_data['interest_social_service'],
+        }
+        
+        fig, ax = plt.subplots(figsize=(8, 5))
+        ax.barh(list(interests.keys()), list(interests.values()), color='lightcoral')
+        ax.set_xlabel('Interest Level (1-5)')
+        ax.set_title('Your Interests')
+        ax.set_xlim(0, 5)
+        st.pyplot(fig)
+    
+    # Key metrics
+    st.markdown("### 📈 Key Metrics")
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        avg_aptitude = np.mean(list(aptitudes.values()))
+        st.metric("Avg Aptitude", f"{avg_aptitude:.1f}/10")
+    
+    with col2:
+        avg_interest = np.mean(list(interests.values()))
+        st.metric("Avg Interest", f"{avg_interest:.1f}/5")
+    
+    with col3:
+        st.metric("Academic Score", f"{(user_data['10th_percentage'] + user_data['12th_percentage'])/2:.1f}%")
+    
+    with col4:
+        st.metric("Stream", user_data['12th_stream'])
+def show_strengths_weaknesses(user_data):
+    """Identify and display student strengths and areas to improve"""
+    
+    st.subheader("💪 Strengths & 🎯 Areas to Improve")
+    
+    # Calculate strength scores
+    aptitudes = {
+        'Logical': user_data['logical_reasoning'],
+        'Quantitative': user_data['quantitative_ability'],
+        'Verbal': user_data['verbal_ability'],
+        'Abstract': user_data['abstract_reasoning'],
+        'Spatial': user_data['spatial_reasoning'],
+    }
+    
+    personality = {
+        'Leadership': user_data['leadership'],
+        'Teamwork': user_data['teamwork'],
+        'Creativity': user_data['creativity'],
+        'Analytical': user_data['analytical_thinking'],
+        'Communication': user_data['communication'],
+    }
+    
+    all_scores = {**aptitudes, **personality}
+    sorted_scores = sorted(all_scores.items(), key=lambda x: x, reverse=True)
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("### ✅ Top 3 Strengths")
+        for i, (skill, score) in enumerate(sorted_scores[:3], 1):
+            st.success(f"{i}. **{skill}**: {score:.1f}/10 ⭐")
+    
+    with col2:
+        st.markdown("### 🎯 Top 3 Areas to Improve")
+        for i, (skill, score) in enumerate(reversed(sorted_scores[-3:]), 1):
+            st.info(f"{i}. **{skill}**: {score:.1f}/10 - Need development")
+    
+    # Recommendations based on weaknesses
+    st.markdown("### 💡 Development Suggestions")
+    
+    for skill, score in sorted_scores[-3:]:
+        if score < 5:
+            suggestion = get_improvement_suggestion(skill)
+            st.write(f"**{skill}** ({score:.1f}/10): {suggestion}")
+
+def get_improvement_suggestion(skill):
+    """Get improvement suggestions for skills"""
+    
+    suggestions = {
+        'Logical': 'Take up puzzles, logic games, coding challenges',
+        'Quantitative': 'Practice aptitude questions, take math courses',
+        'Verbal': 'Read books, practice writing, take English courses',
+        'Abstract': 'Work on visual reasoning, art, design projects',
+        'Spatial': 'Learn 3D modeling, geometry, CAD software',
+        'Leadership': 'Take leadership roles in clubs, projects',
+        'Teamwork': 'Participate in group projects, team sports',
+        'Creativity': 'Pursue creative hobbies, art, design',
+        'Analytical': 'Practice data analysis, problem-solving',
+        'Communication': 'Join debate club, practice public speaking',
+    }
+    
+    return suggestions.get(skill, 'Focus on this skill through practice')
+
+# Add to main app in Tab 2
+#show_strengths_weaknesses(st.session_state.user_profile)
+
+def show_explainability(user_data, recommendations):
+    """Explain why each recommendation was given"""
+    
+    st.subheader("🔍 Why These Recommendations?")
+    st.markdown("Understanding the reasoning behind each suggestion:")
+    
+    stream = user_data['12th_stream']
+    interests = {
+        'Tech': user_data['interest_technology'],
+        'Health': user_data['interest_healthcare'],
+        'Business': user_data['interest_business'],
+        'Research': user_data['interest_research'],
+    }
+    
+    #top_interest = max(interests.items(), key=lambda x: x)
+    top_interest_key, top_interest_value = max(interests.items(), key=lambda x: x[1])
+
+    
+    with st.expander("📋 Explanation", expanded=True):
+        
+        st.write(f"""
+        ### Your Profile Analysis
+        
+        **Stream**: {stream}
+        **Top Interest**: {top_interest_key} (Score: {top_interest_value:.1f}/5)
+
+        ### Why This Path?
+        
+        Based on your profile:
+        1. **Stream Match** ✅
+           - Your {stream} stream qualifies you for {get_career_family(stream)}
+        
+        2. **Interest Alignment** ✅
+           - Your {top_interest_key} interest score ({top_interest_value:.1f}/5) suggests careers in: 
+             {get_careers_for_interest(top_interest_key)}
+        
+        3. **Aptitude Match** ✅
+           - Your strong aptitudes: {get_strong_aptitudes(user_data)}
+           - These align perfectly with recommended roles
+        
+        4. **Market Demand** ✅
+           - These careers have HIGH demand in India (2024-2025)
+           - Growing 10-15% annually
+        """)
+
+def get_career_family(stream):
+    families = {
+        'Science-PCM': 'Engineering, Tech, Data Science',
+        'Science-PCB': 'Medical, Healthcare, Biomedical',
+        'Science-PCMB': 'Engineering, Medical, Research',
+        'Commerce': 'Finance, Accounting, Business',
+        'Arts': 'Law, Social Sciences, Communications'
+    }
+    return families.get(stream, 'Various fields')
+
+def get_careers_for_interest(interest):
+    interests_map = {
+        'Tech': 'Software Engineer, Data Scientist, AI/ML Engineer',
+        'Health': 'Doctor, Nurse, Pharmacist, Therapist',
+        'Business': 'CA, Manager, Entrepreneur, Finance Analyst',
+        'Research': 'Researcher, Professor, Scientist',
+    }
+    return interests_map.get(interest, 'Various careers')
+
+def get_strong_aptitudes(user_data):
+    aptitudes = {
+        'Logical': user_data['logical_reasoning'],
+        'Quantitative': user_data['quantitative_ability'],
+        'Verbal': user_data['verbal_ability'],
+    }
+    strong = [k for k, v in aptitudes.items() if v >= 7]
+    return ', '.join(strong) if strong else 'Mixed aptitudes'
+
+# Add to main app in Tab 2
+#show_explainability(st.session_state.user_profile, st.session_state.recommendations)
 
 # ============================================================================
 # MAIN APP
@@ -156,7 +357,7 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-tab1, tab2, tab3 = st.tabs(["📋 Questionnaire", "🎯 Recommendations", "📊 About"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["📋 Questionnaire", "🎯 Recommendations", "📊 About", "📊 Profile Analysis", "🔍 Why This?"])
 
 # ============================================================================
 # TAB 1: QUESTIONNAIRE
@@ -437,7 +638,16 @@ with tab3:
     - **Commerce**: CA, BBA, B.Com, Finance
     - **Law & Social**: Law, Psychology, Social Work, Journalism
     """)
+with tab4:
+    if 'user_profile' in st.session_state:
+        show_profile_summary(st.session_state.user_profile)
+        st.markdown("---")
+        show_strengths_weaknesses(st.session_state.user_profile)
 
+with tab5:
+    if 'recommendations' in st.session_state:
+        show_explainability(st.session_state.user_profile, 
+                          st.session_state.recommendations)
 st.markdown("---")
 st.markdown("""
 <div style='text-align: center; color: #999; font-size: 12px;'>
